@@ -4,25 +4,40 @@
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import storage from './storage';
+export default {
+  name: 'app',
+  components:{
+  },
+  data() {
+    return {
 
-#nav {
-  padding: 30px;
+    }
+  },
+  mounted() {
+  if(this.$cookie.get('userId')){
+      this.getUser();
+      this.getCartCount();
+    }
+  },
+  methods:{
+    getUser(){
+      this.axios.get('/user').then((res={})=>{
+        this.$store.dispatch('saveUserName',res.username);
+      })
+    },
+    getCartCount(){
+      this.axios.get("/carts/products/sum").then((res=0)=>{
+        this.$store.dispatch('saveCartCount',res);
+      })
+    }
+  }
 }
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="scss">
+@import './assets/scss/reset.scss';
+@import './assets/scss/config.scss';
+@import './assets/scss/button.scss';
 </style>
